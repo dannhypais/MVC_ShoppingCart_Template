@@ -6,6 +6,7 @@
 package controller;
 
 
+import model.Product;
 import model.ShoppingCart;
 import model.ShoppingCartException;
 import view.ShoppinCartViewInterface;
@@ -16,7 +17,7 @@ import view.ShoppinCartViewInterface;
  */
 public class ShoppingCartController {
     
-
+    private final static double MAX_PRICE = 650;
     private final ShoppinCartViewInterface view;
     private final ShoppingCart model;
 
@@ -44,6 +45,22 @@ public class ShoppingCartController {
             view.showError("it is not a number");
         }
         
+    }
+
+    public void doRemoveProduct(Product p) {
+        try {
+            model.removerProduct(p);
+        } catch (ShoppingCartException e) {
+            view.showError(e.getMessage());
+        }
+    }
+
+    public void doCheckPrice() {
+        try {
+            model.checkShopCarPrice(MAX_PRICE);
+        }catch (ShoppingCartException e){
+            view.showError(e.getMessage());
+        }
     }
     
 

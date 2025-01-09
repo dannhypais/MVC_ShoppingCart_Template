@@ -34,6 +34,7 @@ public class ShoppingCartUI extends VBox implements Observer, ShoppinCartViewInt
     //controlos
     private TextField txtInputId;
     private Button btAddProduct;
+    private Button btRemoveProduct;
     private ListView<Product> listProductsView;
     private Label lblError;
     
@@ -63,12 +64,13 @@ public class ShoppingCartUI extends VBox implements Observer, ShoppinCartViewInt
         
         this.txtInputId = new TextField();
         this.btAddProduct = new Button("Add");
+        this.btRemoveProduct = new Button("Remove");
         this.listProductsView = new ListView<>();
         lblError = new Label();
         
         lblCount = new Label("0");
         
-        HBox firstRow = new HBox(txtInputId,btAddProduct, new Label("Total Value"),lblCount);
+        HBox firstRow = new HBox(txtInputId,btAddProduct, btRemoveProduct, new Label("Total Value"),lblCount);
         firstRow.setAlignment(Pos.CENTER);
         firstRow.setPadding(new Insets(2,2,2,2));
         firstRow.setSpacing(4);
@@ -78,12 +80,34 @@ public class ShoppingCartUI extends VBox implements Observer, ShoppinCartViewInt
     @Override
     public void setTriggers(ShoppingCartController controller) {
         btAddProduct.setOnAction((ActionEvent event) -> {
+            lblError.setText(null);
             controller.doAddProduct();
+            alertForMaxPrice(controller);
+        });
+        btRemoveProduct.setOnAction((ActionEvent event) -> {
+            lblError.setText(null);
+            controller.doRemoveProduct(getSelectedProduct());
+            alertForMaxPrice(controller);
         });
 
     }
 
-
+    private void alertForMaxPrice(ShoppingCartController controller) {
+        controller.doCheckPrice();
+        if(lblError.getText() != null) {
+            btAddProduct.setDisable(true);
+            lblCount.setStyle("-fx-text-fill: red");
+        }else{
+            btAddProduct.setDisable(false);
+            lblCount.setStyle("-fx-text-fill: black");
+        }
+    }
+    public Button getBtAddProduct(){
+        return btAddProduct;
+    }
+    private Product getSelectedProduct() {
+        return listProductsView.getSelectionModel().getSelectedItem();
+    }
 
     @Override
     public void showError(String msg) {

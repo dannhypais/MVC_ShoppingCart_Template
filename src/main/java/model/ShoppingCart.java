@@ -36,7 +36,8 @@ public class ShoppingCart extends Subject {
         addProduct(p);
     }
     
-    public void removerProduct(Product p) {
+    public void removerProduct(Product p) throws ShoppingCartException{
+        if(p==null) throw new ShoppingCartException("Nenhum produto selecionado");
         products.remove(p);
         this.notifyObservers(this);
     }
@@ -59,5 +60,8 @@ public class ShoppingCart extends Subject {
         return total;
     }
 
-
+    public void checkShopCarPrice(double maxPrice) {
+        if (this.getTotal() > maxPrice)
+            throw new ShoppingCartException("Valor total do carrinho ultrapassa o limite de preço permitido");
+    }
 }

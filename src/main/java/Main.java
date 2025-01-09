@@ -29,7 +29,7 @@ public class Main extends Application {
         BorderPane window = new BorderPane();
         window.setCenter(view);
 
-        Scene scene = new Scene(window, 300, 250);
+        Scene scene = new Scene(window, 350, 300);
 
         primaryStage.setTitle("Shopping Cart");
         primaryStage.setScene(scene);
